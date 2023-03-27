@@ -1,11 +1,11 @@
 
 resource "azurerm_public_ip" "master_public_ip" {
   count               = 3
-  name                = "master-pub2-ip-${count.index + 1}"
+  name                = "master-pub3-ip-${count.index + 1}"
   location            = var.location
   resource_group_name = var.resource_group_name
   allocation_method   = "Dynamic"
-  domain_name_label   = "unique-pub2-master${count.index + 1}" # <-- Change this value
+  domain_name_label   = "unique-pub3-master${count.index + 1}" # <-- Change this value
   tags                = var.tags
 }
 
@@ -82,6 +82,7 @@ resource "null_resource" "first_master_vm_provisioner" {
       "sudo chown -R $(whoami):$(whoami) /etc/rancher/rke2",
       "sudo mkdir -p /var/lib/rancher/rke2/server/manifests",
       "sudo chown -R $(whoami):$(whoami) /var/lib/rancher/rke2/server/manifests",
+      "sudo mkdir -p ~/.kube"
     ]
 
     connection {
@@ -148,6 +149,7 @@ resource "null_resource" "first_master_vm_provisioner" {
       "  sleep 120", # Allow some time for the first server node to initialize and generate the token
       "  TOKEN=$(sudo cat /var/lib/rancher/rke2/server/node-token)",
       "  echo \"TOKEN=$TOKEN\" | sudo tee -a /etc/environment",
+      "  sudo ln -s /etc/rancher/rke2/rke2.yaml ~/.kube/config",
     ]
 
 
@@ -241,3 +243,16 @@ resource "null_resource" "other_master_vm_provisioner" {
   }
   depends_on = [null_resource.first_master_vm_provisioner]
 }
+
+output "public_ip_addresses" {
+  value = azurerm_public_ip.master_public_ip.*.ip_address
+}
+
+output "vm_private_ips" {
+  value = flatten([
+    for nic in azurerm_network_interface.master_nic :
+    nic.private_ip_address
+  ])
+}
+
+

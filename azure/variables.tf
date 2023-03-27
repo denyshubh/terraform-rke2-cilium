@@ -1,16 +1,16 @@
 variable "client_id" {
   description = "The Azure Client ID"
-  default     = "fd2dc457-66f1-4713-8f64-14234f52349e"
+  default     = "3e231316-0b4f-445b-a3c9-d8127c3def62"
 }
 
 variable "client_secret" {
   description = "The Azure Client Secret"
-  default     = "hXQ8Q~vq4w1C~2ewnNq562Wgt2e3ljioSXUyOazG"
+  default     = "c038Q~bH~2y9ssMEAWRJTXyFeEhGiK.CHup2EawX"
 }
 
 variable "subscription_id" {
   description = "The Azure Subscription ID"
-  default     = "0cfe2870-d256-4119-b0a3-16293ac11bdc"
+  default     = "80ea84e8-afce-4851-928a-9e2219724c69"
 }
 
 variable "tenant_id" {
@@ -20,7 +20,7 @@ variable "tenant_id" {
 
 variable "resource_group_name" {
   description = "The Azure Resource Group Name"
-  default     = "1-9e620c37-playground-sandbox"
+  default     = "1-b0e08605-playground-sandbox"
 }
 
 variable "location" {
